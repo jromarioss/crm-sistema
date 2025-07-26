@@ -47,7 +47,7 @@ export const Form = () => {
 
       <S.Footer>
         <p>Não tem uma conta?</p>
-        <S.Link>Fale com o administrador</S.Link>
+        <span>Fale com o administrador</span>
       </S.Footer>
     </S.Container>
   )

@@ -11,11 +11,17 @@ export const AuthContextProvider = ({ children }: IAuth.IAuthContextProvider) =>
   const [isPassword, setIsPassword] = useState<boolean>(true);
   const [forgotPassword, setForgotPassword] = useState<boolean>(false);
 
+
   return (
     <AuthContext.Provider value={{
       email, password, isPassword, setEmail, setPassword, setIsPassword, forgotPassword, setForgotPassword
     }}>
-      {forgotPassword && <ForgotPasswordModal show={forgotPassword} close={setForgotPassword} />}
+      {forgotPassword &&
+        <ForgotPasswordModal
+          show={forgotPassword}
+          close={setForgotPassword}
+        />
+      }
       {children}
     </AuthContext.Provider>
   )

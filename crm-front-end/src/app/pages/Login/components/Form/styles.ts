@@ -68,10 +68,8 @@ gap-1
 p-8
 text-base
 text-zinc-700
-`;
 
-export const Link = tw.a`
-text-base
-cursor-pointer
-text-blue-500
+[&>span]:text-base
+[&>span]:cursor-pointer
+[&>span]:text-blue-500
 `;
