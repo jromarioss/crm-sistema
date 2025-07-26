@@ -3,38 +3,6 @@
   height: 100dvh;
   display: flex;
   flex-direction: column;
-}
-
-.scrollstyled {
-  -webkit-font-smoothing: antialiased;
-}
-
-body::-webkit-scrollbar,
-.scrollstyled::-webkit-scrollbar {
-  width: 0px; /* 0 por enquanto */
-  background-color: transparent;
-}
-
-body::-webkit-scrollbar-thumb,
-.scrollstyled::-webkit-scrollbar-thumb {
-  background-color: rgb(31 41 55);
-  border-radius: 1rem;
-  cursor: pointer;
-}
-
-body::-webkit-scrollbar:horizontal,
-.scrollstyled::-webkit-scrollbar:horizontal {
-  height: 5px;
-  background-color: transparent;
-}
-
-body::-webkit-scrollbar-thumb:horizontal,
-.scrollstyled::-webkit-scrollbar-thumb:horizontal {
-  background-color: #0f324f;
-  border-radius: 1rem;
-  cursor: pointer;
-}
-
-.scrollstyled::-webkit-scrollbar {
-  width: 5px;
+  margin: 0;
+  padding: 0;
 }

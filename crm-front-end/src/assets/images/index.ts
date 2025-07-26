@@ -1,0 +1,1 @@
+export { default as BgOfficeIMG } from "./bg-officer.jpg";
