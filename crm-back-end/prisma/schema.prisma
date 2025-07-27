@@ -1,0 +1,218 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Position {
+  id          Int      @id @default(autoincrement())
+  description String
+  status      Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  employeeInfo EmployeeInfo[]
+
+  @@map("positions")
+}
+
+model Sector {
+  id          Int      @id @default(autoincrement())
+  description String
+  status      Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  employeeSector EmployeeSector[]
+  production     Production[]
+
+  @@map("sectors")
+}
+
+model EmployeeSector {
+  id          Int      @id @default(autoincrement())
+  id_sector   Int
+  id_employee Int
+  status      Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  sector   Sector   @relation(fields: [id_sector], references: [id])
+  employee Employee @relation(fields: [id_employee], references: [id])
+
+  @@map("employee_sector")
+}
+
+model Production {
+  id          Int      @id @default(autoincrement())
+  id_sector   Int
+  id_employee Int
+  description String
+  amount      Int
+  status      Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  sector   Sector   @relation(fields: [id_sector], references: [id])
+  employee Employee @relation(fields: [id_employee], references: [id])
+
+  @@map("productions")
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  description String
+  amount      Int
+  type        String
+  status      Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  buy         Buy[]
+
+  @@map("products")
+}
+
+model Buy {
+  id              Int      @id @default(autoincrement())
+  id_employee     Int
+  id_product      Int
+  id_supplier     Int
+  month_reference String
+  value           Decimal  @db.Decimal(10, 2)
+  amount          Int
+  total_value     Decimal  @db.Decimal(10, 2)
+  status          Int?     @default(1)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  employee Employee @relation(fields: [id_employee], references: [id])
+  product  Product  @relation(fields: [id_product], references: [id])
+  supplier Supplier @relation(fields: [id_supplier], references: [id])
+
+  @@map("buyers")
+}
+
+model PayStub {
+  id              Int      @id @default(autoincrement())
+  id_employee     Int
+  month_reference String
+  wage            Decimal  @db.Decimal(10, 2)
+  descounts       Decimal  @db.Decimal(10, 2)
+  bonus           Decimal  @db.Decimal(10, 2)
+  total_wage      Decimal
+  status          Int?     @default(1)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  employee Employee @relation(fields: [id_employee], references: [id])
+
+  @@map("pay_stub")
+}
+
+model Employee {
+  id             Int      @id @default(autoincrement())
+  name           String
+  cpf            String
+  email          String   @unique
+  phone          String
+  admission_date DateTime
+  address        String
+  number         String
+  complement     String
+  neighborhood   String
+  city           String
+  state          String
+  status         Int?     @default(1)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  employeeCertificate EmployeeCertificate[]
+  employeeInfo        EmployeeInfo[]
+  employeeMissing     EmployeeMissing[]
+  employeeWarning     EmployeeWarning[]
+  employeeSector      EmployeeSector[]
+  production          Production[]
+  payStub             PayStub[]
+  buy                 Buy[]
+
+  @@map("employees")
+}
+
+model EmployeeInfo {
+  id           Int      @id @default(autoincrement())
+  id_employee  Int
+  id_position  Int
+  wage         Decimal  @db.Decimal(10, 2)
+  meal_voucher Decimal  @db.Decimal(10, 2)
+  status       Int?     @default(1)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  employee Employee @relation(fields: [id_employee], references: [id])
+  position Position @relation(fields: [id_position], references: [id])
+
+  @@map("employee_info")
+}
+
+model EmployeeMissing {
+  id           Int      @id @default(autoincrement())
+  id_employee  Int
+  date_missing DateTime
+  description  String
+  status       Int?     @default(1)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  employee Employee @relation(fields: [id_employee], references: [id])
+
+  @@map("employee_missing")
+}
+
+model EmployeeWarning {
+  id          Int      @id @default(autoincrement())
+  id_employee Int
+  description String
+  date        String
+  status      Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  employee Employee @relation(fields: [id_employee], references: [id])
+
+  @@map("employee_warning")
+}
+
+model EmployeeCertificate {
+  id          Int      @id @default(autoincrement())
+  id_employee Int
+  description String
+  start_date  DateTime
+  end_date    DateTime
+  file        String
+  status      Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  employee Employee @relation(fields: [id_employee], references: [id])
+
+  @@map("employee_certificate")
+}
+
+model Supplier {
+  id         Int      @id @default(autoincrement())
+  name       String
+  cnpj       String
+  phone      String
+  email      String   @unique
+  status     Int?     @default(1)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  buy Buy[]
+
+  @@map("suppliers")
+}
